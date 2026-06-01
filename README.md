@@ -1,8 +1,8 @@
 # FluidCode
 
-Proposta comercial interativa para apresentar uma solucao de venda de piscinas com IA.
+FluidCode cria propostas visuais com IA para empresas de piscinas, transformando enderecos e fotos de terrenos em paginas comerciais personalizadas para acelerar orcamentos e vendas.
 
-A experiencia mostra como uma empresa pode transformar enderecos em propostas visuais personalizadas, com landing page por token, imagens geradas por IA, QR Code e captura de contato.
+A experiencia combina landing page por token, imagens geradas por IA, QR Code e captura de contato para trocar orcamentos frios por apresentacoes visuais de alto impacto.
 
 ## Deploy
 
