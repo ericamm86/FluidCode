@@ -4,6 +4,14 @@ Proposta comercial interativa para apresentar uma solucao de venda de piscinas c
 
 A experiencia mostra como uma empresa pode transformar enderecos em propostas visuais personalizadas, com landing page por token, imagens geradas por IA, QR Code, captura de contato e roteiro de video promocional.
 
+## Deploy
+
+Producao:
+
+```txt
+https://fluidcode-projeto-atualizado.vercel.app
+```
+
 ## Entregaveis
 
 - Proposta comercial responsiva em React.
