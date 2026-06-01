@@ -4,7 +4,6 @@ import {
   imageGenerationEndpoint,
   imageGenerationModel,
   imagePrompts,
-  videoPrompts,
 } from "../src/data/fluidcode.js";
 
 const apiKey = process.env.LITELLM_API_KEY || process.env.IMAGEGEN_API_KEY;
@@ -32,7 +31,7 @@ const atmospherePrompts = atmosphereShowcases.flatMap((showcase) => [
   },
 ]);
 
-for (const item of [...imagePrompts, ...atmospherePrompts, ...videoPrompts]) {
+for (const item of [...imagePrompts, ...atmospherePrompts]) {
   const filePath = new URL(`${item.id}.png`, outDir);
 
   if (!process.env.FORCE_IMAGEGEN && await fileExists(filePath)) {

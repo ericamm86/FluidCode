@@ -63,7 +63,7 @@ const benefits = [
 const productHighlights = [
   {
     tag: "Engine de renderização",
-    title: "Do quintal vazio ao paraíso particular em 60 segundos.",
+    title: "Do quintal vazio ao paraíso particular em uma proposta visual.",
     text: "A FluidCode transforma fotos e referências do imóvel em uma simulação comercial de alto impacto, ajustando perspectiva, composição, piscina, deck, água e paisagismo para o cliente enxergar o projeto pronto.",
     benefit:
       "O cliente sente o desejo imediato de posse ao se imaginar dentro do próprio projeto.",
@@ -423,33 +423,6 @@ export default function FluidCodePitch() {
           </div>
         </div>
       </section>
-
-      <section id="video" className="mx-auto max-w-6xl px-5 py-20">
-        <SectionHeader
-          eyebrow="Vídeo demonstrativo"
-          title="10 segundos para transformar um terreno criado por IA em projeto com piscina."
-          text="O vídeo mostra primeiro o terreno sem piscina e depois o mesmo imóvel com a implantação de uma piscina residencial, deck, paisagismo e área de lazer."
-        />
-        <div className="mt-10 grid gap-8">
-          <figure className="mx-auto w-full max-w-4xl overflow-hidden rounded-lg bg-[#061d28] text-white shadow-[0_20px_48px_rgba(16,35,43,0.15)]">
-            <video
-              controls
-              preload="metadata"
-              poster={publicAsset("/fluidcode/generated/before-after-satellite.png")}
-              className="aspect-video w-full bg-black object-contain"
-            >
-              <source src={publicAsset("/fluidcode/video/fluidcode-terreno-piscina-ia.mp4")} type="video/mp4" />
-            </video>
-          </figure>
-
-          <p className="rounded-lg border border-slate-200 bg-[#f7fbfb] p-5 text-sm leading-7 text-slate-600">
-            <strong className="text-[#10232b]">Nota de apresentação:</strong> O material
-            compara uma imagem aérea de terreno residencial sem piscina com a proposta final
-            contendo piscina implantada, deck, mobiliário externo e paisagismo.
-          </p>
-        </div>
-      </section>
-
       <section className="bg-white">
         <div className="mx-auto max-w-6xl px-5 py-20">
           <SectionHeader
@@ -488,7 +461,7 @@ export default function FluidCodePitch() {
             </p>
           </div>
           <a
-            href="#video"
+            href="#simulador-visual"
             className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-sm font-black text-[#063d54]"
           >
             Ver motor visual
@@ -521,8 +494,7 @@ function Hero() {
           <a href="#proposta" className="hover:text-white">Proposta</a>
           <a href="#galeria" className="hover:text-white">Galeria</a>
           <a href="#simulador-visual" className="hover:text-white">Simulador</a>
-          <a href="#video" className="hover:text-white">Motor IA</a>
-          <a href="#video" className="hover:text-white">Vídeo</a>
+          <a href="#simulador-visual" className="hover:text-white">Motor IA</a>
         </div>
       </nav>
       <div className="relative z-10 mx-auto grid max-w-6xl px-5 pb-16 pt-20 md:pt-28">
@@ -547,7 +519,7 @@ function Hero() {
               <ArrowRight size={18} />
             </a>
             <a
-              href="#video"
+              href="#simulador-visual"
               className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-white/36 bg-white/12 px-5 py-3 text-sm font-black text-white backdrop-blur"
             >
               <Camera size={18} />

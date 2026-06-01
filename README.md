@@ -2,7 +2,7 @@
 
 Proposta comercial interativa para apresentar uma solucao de venda de piscinas com IA.
 
-A experiencia mostra como uma empresa pode transformar enderecos em propostas visuais personalizadas, com landing page por token, imagens geradas por IA, QR Code, captura de contato e roteiro de video promocional.
+A experiencia mostra como uma empresa pode transformar enderecos em propostas visuais personalizadas, com landing page por token, imagens geradas por IA, QR Code e captura de contato.
 
 ## Deploy
 
@@ -17,7 +17,6 @@ https://fluidcode-projeto-atualizado.vercel.app
 - Proposta comercial responsiva em React.
 - Demo acessivel em `/` e `/000000`.
 - Galeria com imagens de referencia da solucao.
-- Roteiro de video promocional de 60 segundos.
 - Prompts profissionais de geracao de imagem versionados no codigo.
 - Integracao preparada para `POST /v1/images/generations` no endpoint `https://litellm.cogmo.com.br`.
 

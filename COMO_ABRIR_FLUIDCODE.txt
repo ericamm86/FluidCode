@@ -18,4 +18,4 @@ Requisito:
 
 Observacao:
 
-Se abrir apenas o index.html direto, a pagina pode ficar em branco porque o navegador bloqueia ou nao encontra os arquivos JavaScript, CSS, imagens e videos da aplicacao.
+Se abrir apenas o index.html direto, a pagina pode ficar em branco porque o navegador bloqueia ou nao encontra os arquivos JavaScript, CSS e imagens da aplicacao.

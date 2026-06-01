@@ -8,10 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint .",
-    "generate:images": "node scripts/generate-fluidcode-images.mjs",
-    "generate:video": "node scripts/generate-fluidcode-video.mjs",
-    "generate:demo-video": "node scripts/generate-fluidcode-demo-video.mjs",
-    "generate:terrain-video": "node scripts/generate-fluidcode-terrain-pool-video.mjs"
+    "generate:images": "node scripts/generate-fluidcode-images.mjs"
   },
   "dependencies": {
     "@tensorflow/tfjs": "^4.22.0",
