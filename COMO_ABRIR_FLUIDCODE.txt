@@ -1,0 +1,21 @@
+COMO ABRIR O PROJETO FLUIDCODE
+
+Nao abra o arquivo index.html direto com duplo clique.
+Este projeto e uma aplicacao React/Vite e precisa rodar em um servidor local.
+
+Passo a passo:
+
+1. Extraia o arquivo .zip.
+2. Abra a pasta extraida.
+3. Clique duas vezes em ABRIR_FLUIDCODE.bat.
+4. Aguarde a instalacao/geracao terminar.
+5. Abra no navegador o endereco exibido no terminal, normalmente:
+   http://127.0.0.1:4173/
+
+Requisito:
+
+- Node.js 22 ou superior instalado.
+
+Observacao:
+
+Se abrir apenas o index.html direto, a pagina pode ficar em branco porque o navegador bloqueia ou nao encontra os arquivos JavaScript, CSS, imagens e videos da aplicacao.

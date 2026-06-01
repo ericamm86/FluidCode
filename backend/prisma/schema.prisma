@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String               @id @default(uuid())
+  nome      String
+  email     String               @unique
+  senha     String
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+  registros RegistroEmocional[]
+
+  @@map("users")
+}
+
+model RegistroEmocional {
+  id        String   @id @default(uuid())
+  humor     Int
+  estresse  Int
+  energia   Int
+  anotacao  String?
+  data      DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, data])
+  @@map("registros_emocionais")
+}
