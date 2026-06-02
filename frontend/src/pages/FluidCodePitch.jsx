@@ -165,6 +165,55 @@ const currencyFormatter = new Intl.NumberFormat("pt-BR", {
   maximumFractionDigits: 0,
 });
 
+const upsellVisuals = {
+  base: {
+    src: publicAsset("/fluidcode/generated/before-after-luxury-yard.png"),
+    alt: "Comparativo visual antes e depois da implantacao da piscina",
+    label: "Piscina implantada",
+    imageClass: "",
+  },
+  areaGourmet: {
+    src: publicAsset("/fluidcode/generated/hero-resort-yard.png"),
+    alt: "Piscina integrada a area gourmet sem energia solar",
+    label: "Area gourmet ativada",
+    imageClass: "scale-[1.04] rotate-[-1deg]",
+  },
+  iluminacao: {
+    src: publicAsset("/fluidcode/generated/atmosphere-night-after.png"),
+    alt: "Piscina com iluminacao noturna e paisagismo valorizado",
+    label: "Iluminacao noturna ativada",
+    imageClass: "",
+  },
+  energiaSolar: {
+    src: publicAsset("/fluidcode/generated/upsell-backyard.png"),
+    alt: "Piscina integrada a area gourmet com energia solar e valorizacao do imovel",
+    label: "Energia solar ativada",
+    imageClass: "scale-[1.08] rotate-[1deg] origin-top-right",
+  },
+};
+
+function getUpsellVisual(selectedUpsells) {
+  if (selectedUpsells.energiaSolar) {
+    return {
+      ...upsellVisuals.energiaSolar,
+      label: selectedUpsells.areaGourmet
+        ? "Area gourmet + energia solar ativadas"
+        : "Energia solar ativada",
+    };
+  }
+
+  if (selectedUpsells.areaGourmet && selectedUpsells.iluminacao) {
+    return {
+      ...upsellVisuals.iluminacao,
+      label: "Area gourmet + iluminacao ativadas",
+    };
+  }
+
+  if (selectedUpsells.iluminacao) return upsellVisuals.iluminacao;
+  if (selectedUpsells.areaGourmet) return upsellVisuals.areaGourmet;
+  return upsellVisuals.base;
+}
+
 export default function FluidCodePitch() {
   const [selectedAtmosphereId, setSelectedAtmosphereId] = useState(atmosphereShowcases[0].id);
   const [selectedUpsells, setSelectedUpsells] = useState(() =>
@@ -181,8 +230,13 @@ export default function FluidCodePitch() {
     [selectedAtmosphereId]
   );
 
+  const upsellVisual = useMemo(() => getUpsellVisual(selectedUpsells), [selectedUpsells]);
+
   const upsellImpact = useMemo(() => {
-    const activeIds = ["piscina", ...upsellOptions.filter((option) => selectedUpsells[option.id]).map((option) => option.id)];
+    const activeUpgradeIds = upsellOptions
+      .filter((option) => selectedUpsells[option.id])
+      .map((option) => option.id);
+    const activeIds = ["piscina", ...activeUpgradeIds];
     const activeItems = activeIds.map((id) => upsellDemo.upsells[id]);
     const finalValue = activeItems.reduce(
       (value, item) => value * item.multiplicador,
@@ -196,6 +250,9 @@ export default function FluidCodePitch() {
 
     return {
       activeIds,
+      activeUpgradeIds,
+      activeUpgradeCount: activeUpgradeIds.length,
+      selectedLabels: activeUpgradeIds.map((id) => upsellDemo.upsells[id].label),
       finalValue,
       valuationPercent,
       wellbeingScore,
@@ -458,6 +515,7 @@ export default function FluidCodePitch() {
       <UpsellConfigurator
         impact={upsellImpact}
         selectedUpsells={selectedUpsells}
+        visual={upsellVisual}
         onToggle={toggleUpsell}
       />
 
@@ -554,15 +612,9 @@ export default function FluidCodePitch() {
   );
 }
 
-function UpsellConfigurator({ impact, selectedUpsells, onToggle }) {
-  const visualImage = selectedUpsells.iluminacao
-    ? publicAsset("/fluidcode/generated/atmosphere-night-after.png")
-    : selectedUpsells.areaGourmet || selectedUpsells.energiaSolar
-      ? publicAsset("/fluidcode/generated/upsell-backyard.png")
-      : publicAsset("/fluidcode/generated/hero-resort-yard.png");
-
+function UpsellConfigurator({ impact, selectedUpsells, visual, onToggle }) {
   const chartData = {
-    labels: ["Valorizacao", "Fator uau"],
+    labels: ["Valorizacao", "Impacto percebido"],
     datasets: [
       {
         label: "Impacto",
@@ -611,14 +663,28 @@ function UpsellConfigurator({ impact, selectedUpsells, onToggle }) {
             <SectionHeader
               eyebrow="Demonstração de upsell"
               title="Monte seu Espaço e veja o valor percebido subir."
-              text="O cliente escolhe upgrades enquanto a proposta mostra impacto visual, valorizacao estimada e fator uau em tempo real."
+              text="O cliente escolhe upgrades enquanto a proposta mostra impacto visual, valorizacao estimada e impacto percebido em tempo real."
             />
+
+            <div className="mt-6 flex flex-wrap gap-2">
+              {impact.selectedLabels.length ? (
+                impact.selectedLabels.map((label) => (
+                  <span key={label} className="rounded-full bg-[#e3f7f0] px-3 py-2 text-xs font-black uppercase tracking-[0.08em] text-[#08785a]">
+                    {label}
+                  </span>
+                ))
+              ) : (
+                <span className="rounded-full bg-slate-100 px-3 py-2 text-xs font-black uppercase tracking-[0.08em] text-slate-500">
+                  Nenhum upgrade selecionado
+                </span>
+              )}
+            </div>
 
             <div className="mt-8 rounded-lg border border-slate-200 bg-[#f7fbfb] p-5">
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5">
                 <div>
                   <p className="text-xs font-black uppercase tracking-[0.16em] text-[#0b7fab]">
-                    Token {upsellDemo.token}
+                    Simulação personalizada
                   </p>
                   <h3 className="mt-1 text-xl font-black text-[#10232b]">
                     {upsellDemo.localizacao}
@@ -681,13 +747,16 @@ function UpsellConfigurator({ impact, selectedUpsells, onToggle }) {
           </div>
 
           <div className="overflow-hidden rounded-lg border border-slate-200 bg-[#f7fbfb] shadow-[0_24px_60px_rgba(11,76,104,0.14)]">
-            <figure className="relative aspect-[16/10] overflow-hidden bg-slate-900">
+            <figure className="relative aspect-[4/3] overflow-hidden bg-[#061d28] sm:aspect-[3/2]">
               <img
-                src={visualImage}
-                alt="Configurador visual de upsell para area externa com piscina"
-                className="h-full w-full object-cover transition duration-500"
+                src={visual.src}
+                alt={visual.alt}
+                className={`h-full w-full object-contain transition duration-500 ${visual.imageClass}`}
               />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#061d28]/90 to-transparent p-5 text-white">
+                <span className="mb-3 inline-flex rounded-full bg-white/15 px-3 py-1 text-xs font-black uppercase tracking-[0.12em] text-[#75dfbd]">
+                  {visual.label}
+                </span>
                 <div className="flex flex-wrap items-end justify-between gap-4">
                   <div>
                     <p className="text-xs font-black uppercase tracking-[0.16em] text-[#75dfbd]">
@@ -716,7 +785,7 @@ function UpsellConfigurator({ impact, selectedUpsells, onToggle }) {
                 />
                 <ImpactBadge
                   icon={Flame}
-                  label="Fator uau"
+                  label="Impacto percebido"
                   value={`${impact.wellbeingScore}/100`}
                 />
                 <ImpactBadge
@@ -737,7 +806,7 @@ function UpsellConfigurator({ impact, selectedUpsells, onToggle }) {
                     </h3>
                   </div>
                   <span className="rounded-full bg-[#063d54] px-3 py-1 text-xs font-black text-white">
-                    {impact.activeIds.length} itens ativos
+                    {impact.activeUpgradeCount} upgrades ativos
                   </span>
                 </div>
                 <div className="h-40">
