@@ -63,7 +63,7 @@ const benefits = [
 const productHighlights = [
   {
     tag: "Engine de renderização",
-    title: "Do quintal vazio ao paraíso particular em uma proposta visual.",
+    title: "Do quintal vazio ao paraíso particular em 10 segundos.",
     text: "A FluidCode transforma fotos e referências do imóvel em uma simulação comercial de alto impacto, ajustando perspectiva, composição, piscina, deck, água e paisagismo para o cliente enxergar o projeto pronto.",
     benefit:
       "O cliente sente o desejo imediato de posse ao se imaginar dentro do próprio projeto.",
