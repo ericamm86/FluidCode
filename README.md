@@ -17,6 +17,7 @@ https://fluidcode-projeto-atualizado.vercel.app
 - Proposta comercial responsiva em React.
 - Demo acessivel em `/` e `/000000`.
 - Galeria com imagens de referencia da solucao.
+- Configurador visual de upsell "Monte seu Espaco" com termometro de impacto.
 - Prompts profissionais de geracao de imagem versionados no codigo.
 - Integracao preparada para `POST /v1/images/generations` no endpoint `https://litellm.cogmo.com.br`.
 

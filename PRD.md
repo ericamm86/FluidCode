@@ -51,6 +51,9 @@ O FluidCode transforma um endereco comum em uma proposta visual personalizada co
 - Hero visual com imagem gerada por IA.
 - Secoes de proposta, beneficios, processo comercial e valor para a empresa.
 - Simulador atmosferico com modos de manha, fim de tarde e noite com LEDs.
+- Demonstracao de upsell gamificada com checklist visual "Monte seu Espaco".
+- Termometro de impacto para valorizacao estimada e fator uau.
+- Simulacao de dados de token em JSON para calculo de valor do imovel e pesos de upsell.
 - Galeria de imagens geradas por IA.
 - Video demonstrativo integrado.
 - Conteudo de pitch comercial para venda da solucao.
@@ -146,11 +149,20 @@ Tem interesse em uma piscina, mas sente inseguranca sobre tamanho, posicao, luz,
 - RF-15: O sistema deve destacar ganhos de venda visual, lead qualificado e operacao escalavel.
 - RF-16: O sistema deve apresentar oportunidades de upsell na area externa.
 
+### Upsell Gamificado
+
+- RF-17: O sistema deve exibir a secao "Monte seu Espaco" com checklist de upgrades.
+- RF-18: O usuario deve poder marcar Area Gourmet, Iluminacao Noturna e Energia Solar.
+- RF-19: A imagem da proposta deve mudar conforme os upsells selecionados.
+- RF-20: O sistema deve calcular valor estimado, valorizacao percentual e fator uau a partir de dados simulados em JSON.
+- RF-21: O sistema deve exibir selo de economia estimada quando Energia Solar estiver selecionada.
+- RF-22: O sistema deve renderizar grafico de impacto usando biblioteca gratuita de graficos.
+
 ### Geracao de Assets
 
-- RF-17: O sistema deve manter prompts de geracao de imagens versionados no codigo.
-- RF-18: O sistema deve permitir configurar endpoint de geracao de imagem via variavel de ambiente.
-- RF-19: O sistema deve disponibilizar scripts para gerar imagens e videos promocionais.
+- RF-23: O sistema deve manter prompts de geracao de imagens versionados no codigo.
+- RF-24: O sistema deve permitir configurar endpoint de geracao de imagem via variavel de ambiente.
+- RF-25: O sistema deve disponibilizar scripts para gerar imagens e videos promocionais.
 
 ## 10. Requisitos Nao Funcionais
 
@@ -188,6 +200,16 @@ Tem interesse em uma piscina, mas sente inseguranca sobre tamanho, posicao, luz,
 - asset
 - propostaToken
 - createdAt
+
+### ConfiguracaoUpsell
+
+- token
+- localizacao
+- areaConstruidaM2
+- valorM2
+- valorEstimadoAtual
+- moeda
+- upsells
 
 ### Lead
 

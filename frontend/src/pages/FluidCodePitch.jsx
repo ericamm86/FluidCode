@@ -1,18 +1,32 @@
 import { useMemo, useState } from "react";
 import {
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  LinearScale,
+  Tooltip,
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
+import {
   ArrowRight,
   BadgeCheck,
   Building2,
   Camera,
   CalendarCheck,
+  CheckCircle2,
   ChevronRight,
   FileImage,
   Fingerprint,
+  Flame,
   LayoutDashboard,
+  Moon,
   QrCode,
   ScanSearch,
   Sparkles,
+  Sun,
   Target,
+  TrendingUp,
+  Utensils,
   WandSparkles,
   Workflow,
 } from "lucide-react";
@@ -20,6 +34,9 @@ import {
   atmosphereShowcases,
   publicAsset,
 } from "../data/fluidcode";
+import upsellDemo from "../data/upsell-demo.json";
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
 
 const metrics = [
   {
@@ -124,8 +141,38 @@ const workflow = [
   },
 ];
 
+const upsellOptions = [
+  {
+    id: "areaGourmet",
+    icon: Utensils,
+    detail: "A IA atualiza a proposta com churrasqueira, bancada e area de convivencia.",
+  },
+  {
+    id: "iluminacao",
+    icon: Moon,
+    detail: "O cenario muda para noite com LEDs subaquaticos e luz de paisagismo.",
+  },
+  {
+    id: "energiaSolar",
+    icon: Sun,
+    detail: "A proposta adiciona eficiencia energetica e selo de economia estimada.",
+  },
+];
+
+const currencyFormatter = new Intl.NumberFormat("pt-BR", {
+  style: "currency",
+  currency: upsellDemo.moeda,
+  maximumFractionDigits: 0,
+});
+
 export default function FluidCodePitch() {
   const [selectedAtmosphereId, setSelectedAtmosphereId] = useState(atmosphereShowcases[0].id);
+  const [selectedUpsells, setSelectedUpsells] = useState(() =>
+    upsellOptions.reduce((acc, option) => {
+      acc[option.id] = upsellDemo.upsells[option.id].ativoInicial;
+      return acc;
+    }, {})
+  );
 
   const selectedAtmosphere = useMemo(
     () =>
@@ -133,6 +180,34 @@ export default function FluidCodePitch() {
       atmosphereShowcases[0],
     [selectedAtmosphereId]
   );
+
+  const upsellImpact = useMemo(() => {
+    const activeIds = ["piscina", ...upsellOptions.filter((option) => selectedUpsells[option.id]).map((option) => option.id)];
+    const activeItems = activeIds.map((id) => upsellDemo.upsells[id]);
+    const finalValue = activeItems.reduce(
+      (value, item) => value * item.multiplicador,
+      upsellDemo.valorEstimadoAtual
+    );
+    const valuationPercent = Math.round(((finalValue / upsellDemo.valorEstimadoAtual) - 1) * 100);
+    const wellbeingScore = Math.min(
+      100,
+      activeItems.reduce((total, item) => total + item.bemEstar, 0)
+    );
+
+    return {
+      activeIds,
+      finalValue,
+      valuationPercent,
+      wellbeingScore,
+      economy: selectedUpsells.energiaSolar
+        ? upsellDemo.upsells.energiaSolar.economiaEstimadaMensal
+        : 0,
+    };
+  }, [selectedUpsells]);
+
+  const toggleUpsell = (id) => {
+    setSelectedUpsells((current) => ({ ...current, [id]: !current[id] }));
+  };
 
   return (
     <main className="min-h-screen bg-[#f7fbfb] text-[#10232b]">
@@ -380,6 +455,12 @@ export default function FluidCodePitch() {
         </div>
       </section>
 
+      <UpsellConfigurator
+        impact={upsellImpact}
+        selectedUpsells={selectedUpsells}
+        onToggle={toggleUpsell}
+      />
+
       <section id="galeria" className="bg-[#0d172a] px-5 py-24 text-white">
         <div className="mx-auto max-w-6xl">
           <div className="mx-auto max-w-4xl text-center">
@@ -470,6 +551,216 @@ export default function FluidCodePitch() {
         </div>
       </section>
     </main>
+  );
+}
+
+function UpsellConfigurator({ impact, selectedUpsells, onToggle }) {
+  const visualImage = selectedUpsells.iluminacao
+    ? publicAsset("/fluidcode/generated/atmosphere-night-after.png")
+    : selectedUpsells.areaGourmet || selectedUpsells.energiaSolar
+      ? publicAsset("/fluidcode/generated/upsell-backyard.png")
+      : publicAsset("/fluidcode/generated/hero-resort-yard.png");
+
+  const chartData = {
+    labels: ["Valorizacao", "Fator uau"],
+    datasets: [
+      {
+        label: "Impacto",
+        data: [Math.min(100, impact.valuationPercent), impact.wellbeingScore],
+        backgroundColor: ["#0b7fab", "#17a878"],
+        borderRadius: 8,
+        barThickness: 18,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    indexAxis: "y",
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: (context) => `${context.parsed.x}%`,
+        },
+      },
+    },
+    scales: {
+      x: {
+        min: 0,
+        max: 100,
+        grid: { color: "rgba(15, 23, 42, 0.08)" },
+        ticks: {
+          color: "#475569",
+          callback: (value) => `${value}%`,
+        },
+      },
+      y: {
+        grid: { display: false },
+        ticks: { color: "#10232b", font: { weight: "700" } },
+      },
+    },
+  };
+
+  return (
+    <section id="monte-seu-espaco" className="bg-white px-5 py-24">
+      <div className="mx-auto max-w-6xl">
+        <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+          <div>
+            <SectionHeader
+              eyebrow="Demonstração de upsell"
+              title="Monte seu Espaço e veja o valor percebido subir."
+              text="O cliente escolhe upgrades enquanto a proposta mostra impacto visual, valorizacao estimada e fator uau em tempo real."
+            />
+
+            <div className="mt-8 rounded-lg border border-slate-200 bg-[#f7fbfb] p-5">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-5">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.16em] text-[#0b7fab]">
+                    Token {upsellDemo.token}
+                  </p>
+                  <h3 className="mt-1 text-xl font-black text-[#10232b]">
+                    {upsellDemo.localizacao}
+                  </h3>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">
+                    Valor base
+                  </p>
+                  <strong className="text-lg font-black text-[#10232b]">
+                    {currencyFormatter.format(upsellDemo.valorEstimadoAtual)}
+                  </strong>
+                </div>
+              </div>
+
+              <div className="mt-5 grid gap-3">
+                {upsellOptions.map((option) => {
+                  const item = upsellDemo.upsells[option.id];
+                  const Icon = option.icon;
+                  const isSelected = selectedUpsells[option.id];
+
+                  return (
+                    <label
+                      key={option.id}
+                      className={`grid cursor-pointer grid-cols-[24px_40px_minmax(0,1fr)] gap-3 rounded-lg border p-4 transition ${
+                        isSelected
+                          ? "border-[#17a878] bg-white shadow-[0_12px_28px_rgba(23,168,120,0.12)]"
+                          : "border-slate-200 bg-white/60 hover:border-[#0b7fab]"
+                      }`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => onToggle(option.id)}
+                        className="mt-2 h-5 w-5 accent-[#17a878]"
+                      />
+                      <span
+                        className={`grid h-10 w-10 place-items-center rounded-md ${
+                          isSelected ? "bg-[#e3f7f0] text-[#08785a]" : "bg-slate-100 text-slate-500"
+                        }`}
+                      >
+                        <Icon size={20} />
+                      </span>
+                      <span>
+                        <span className="flex flex-wrap items-center gap-2 text-base font-black text-[#10232b]">
+                          {item.label}
+                          <span className="rounded-full bg-[#e3f7f0] px-2 py-1 text-xs font-black text-[#08785a]">
+                            +{item.valorizacao}% valor
+                          </span>
+                        </span>
+                        <span className="mt-1 block text-sm leading-6 text-slate-600">
+                          {option.detail}
+                        </span>
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          <div className="overflow-hidden rounded-lg border border-slate-200 bg-[#f7fbfb] shadow-[0_24px_60px_rgba(11,76,104,0.14)]">
+            <figure className="relative aspect-[16/10] overflow-hidden bg-slate-900">
+              <img
+                src={visualImage}
+                alt="Configurador visual de upsell para area externa com piscina"
+                className="h-full w-full object-cover transition duration-500"
+              />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#061d28]/90 to-transparent p-5 text-white">
+                <div className="flex flex-wrap items-end justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-[0.16em] text-[#75dfbd]">
+                      Valor estimado com proposta
+                    </p>
+                    <strong className="mt-1 block text-3xl font-black">
+                      {currencyFormatter.format(impact.finalValue)}
+                    </strong>
+                  </div>
+                  {impact.economy > 0 && (
+                    <span className="inline-flex items-center gap-2 rounded-full bg-[#75dfbd] px-4 py-2 text-sm font-black text-[#063d54]">
+                      <CheckCircle2 size={18} />
+                      Economia estimada {currencyFormatter.format(impact.economy)}/mês
+                    </span>
+                  )}
+                </div>
+              </div>
+            </figure>
+
+            <div className="grid gap-5 p-5">
+              <div className="grid gap-4 sm:grid-cols-3">
+                <ImpactBadge
+                  icon={TrendingUp}
+                  label="Valorização"
+                  value={`+${impact.valuationPercent}%`}
+                />
+                <ImpactBadge
+                  icon={Flame}
+                  label="Fator uau"
+                  value={`${impact.wellbeingScore}/100`}
+                />
+                <ImpactBadge
+                  icon={Building2}
+                  label="Valor por m²"
+                  value={currencyFormatter.format(upsellDemo.valorM2)}
+                />
+              </div>
+
+              <div className="rounded-lg border border-slate-200 bg-white p-5">
+                <div className="mb-4 flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-xs font-black uppercase tracking-[0.14em] text-[#0b7fab]">
+                      Termômetro comercial
+                    </p>
+                    <h3 className="mt-1 text-lg font-black text-[#10232b]">
+                      Impacto de bem-estar e valor
+                    </h3>
+                  </div>
+                  <span className="rounded-full bg-[#063d54] px-3 py-1 text-xs font-black text-white">
+                    {impact.activeIds.length} itens ativos
+                  </span>
+                </div>
+                <div className="h-40">
+                  <Bar data={chartData} options={chartOptions} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ImpactBadge({ icon: Icon, label, value }) {
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-4">
+      <div className="mb-3 grid h-10 w-10 place-items-center rounded-md bg-[#e3f7f0] text-[#08785a]">
+        <Icon size={19} />
+      </div>
+      <p className="text-xs font-bold uppercase tracking-[0.12em] text-slate-500">{label}</p>
+      <strong className="mt-1 block text-xl font-black text-[#10232b]">{value}</strong>
+    </div>
   );
 }
 

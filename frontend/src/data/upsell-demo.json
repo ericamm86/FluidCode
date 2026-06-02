@@ -1,0 +1,39 @@
+{
+  "token": "000000",
+  "localizacao": "Brasilia - DF",
+  "areaConstruidaM2": 180,
+  "valorM2": 2778,
+  "valorEstimadoAtual": 500000,
+  "moeda": "BRL",
+  "upsells": {
+    "piscina": {
+      "label": "Piscina implantada",
+      "valorizacao": 15,
+      "bemEstar": 40,
+      "multiplicador": 1.15,
+      "ativoInicial": true
+    },
+    "areaGourmet": {
+      "label": "Adicionar Area Gourmet",
+      "valorizacao": 10,
+      "bemEstar": 30,
+      "multiplicador": 1.1,
+      "ativoInicial": false
+    },
+    "iluminacao": {
+      "label": "Adicionar Iluminacao Noturna",
+      "valorizacao": 3,
+      "bemEstar": 15,
+      "multiplicador": 1.03,
+      "ativoInicial": false
+    },
+    "energiaSolar": {
+      "label": "Adicionar Energia Solar",
+      "valorizacao": 7,
+      "bemEstar": 15,
+      "multiplicador": 1.07,
+      "ativoInicial": false,
+      "economiaEstimadaMensal": 620
+    }
+  }
+}
