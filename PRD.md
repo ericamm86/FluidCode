@@ -52,7 +52,8 @@ O FluidCode transforma um endereco comum em uma proposta visual personalizada co
 - Secoes de proposta, beneficios, processo comercial e valor para a empresa.
 - Simulador atmosferico com modos de manha, fim de tarde e noite com LEDs.
 - Demonstracao de upsell gamificada com checklist visual "Monte seu Espaco".
-- Termometro de impacto para valorizacao estimada e fator uau.
+- Logica de estado React para upgrades, imagem dinamica e metricas comerciais em tempo real.
+- Termometro de impacto para valorizacao estimada e impacto percebido.
 - Simulacao de dados de token em JSON para calculo de valor do imovel e pesos de upsell.
 - Galeria de imagens geradas por IA.
 - Video demonstrativo integrado.
@@ -119,6 +120,13 @@ Tem interesse em uma piscina, mas sente inseguranca sobre tamanho, posicao, luz,
 3. Visualiza os recursos de IA, token, QR Code e funil.
 4. Avalia o potencial de uso em campanhas e prospeccao.
 
+### Jornada 5: Personalizar Upsells da Area Externa
+
+1. O cliente acessa a secao "Monte seu Espaco".
+2. Marca upgrades como Area Gourmet, Iluminacao Noturna e Energia Solar.
+3. A interface atualiza a imagem principal, valor estimado, valorizacao e impacto percebido.
+4. O cliente entende o ganho visual e comercial de cada upgrade antes de solicitar orcamento.
+
 ## 9. Requisitos Funcionais
 
 ### Paginas e Rotas
@@ -153,16 +161,21 @@ Tem interesse em uma piscina, mas sente inseguranca sobre tamanho, posicao, luz,
 
 - RF-17: O sistema deve exibir a secao "Monte seu Espaco" com checklist de upgrades.
 - RF-18: O usuario deve poder marcar Area Gourmet, Iluminacao Noturna e Energia Solar.
-- RF-19: A imagem da proposta deve mudar conforme os upsells selecionados.
-- RF-20: O sistema deve calcular valor estimado, valorizacao percentual e fator uau a partir de dados simulados em JSON.
-- RF-21: O sistema deve exibir selo de economia estimada quando Energia Solar estiver selecionada.
-- RF-22: O sistema deve renderizar grafico de impacto usando biblioteca gratuita de graficos.
+- RF-19: A imagem da proposta deve mudar conforme os upsells selecionados, mantendo uma narrativa visual consistente.
+- RF-20: A logica visual deve priorizar Energia Solar quando selecionada, depois Iluminacao Noturna, depois Area Gourmet e, por fim, a imagem base.
+- RF-21: Area Gourmet deve exibir uma imagem de piscina com area gourmet sem paineis solares.
+- RF-22: Energia Solar deve exibir uma imagem com paineis solares no telhado e label combinado quando tambem houver Area Gourmet selecionada.
+- RF-23: O sistema deve calcular valor estimado, valorizacao percentual e impacto percebido a partir de dados simulados em JSON.
+- RF-24: O sistema deve exibir chips com os upgrades selecionados e contador de upgrades ativos.
+- RF-25: O sistema deve exibir selo de economia estimada quando Energia Solar estiver selecionada.
+- RF-26: O sistema deve renderizar grafico de impacto usando biblioteca gratuita de graficos.
+- RF-27: A secao de upsell nao deve exibir token tecnico ao usuario final; deve usar uma identificacao comercial, como "Simulacao personalizada".
 
 ### Geracao de Assets
 
-- RF-23: O sistema deve manter prompts de geracao de imagens versionados no codigo.
-- RF-24: O sistema deve permitir configurar endpoint de geracao de imagem via variavel de ambiente.
-- RF-25: O sistema deve disponibilizar scripts para gerar imagens e videos promocionais.
+- RF-28: O sistema deve manter prompts de geracao de imagens versionados no codigo.
+- RF-29: O sistema deve permitir configurar endpoint de geracao de imagem via variavel de ambiente.
+- RF-30: O sistema deve disponibilizar scripts para gerar imagens e videos promocionais.
 
 ## 10. Requisitos Nao Funcionais
 
@@ -203,13 +216,16 @@ Tem interesse em uma piscina, mas sente inseguranca sobre tamanho, posicao, luz,
 
 ### ConfiguracaoUpsell
 
-- token
 - localizacao
 - areaConstruidaM2
 - valorM2
 - valorEstimadoAtual
 - moeda
 - upsells
+- upgradesAtivos
+- imagemAtiva
+- prioridadeVisual
+- impactoPercebido
 
 ### Lead
 
@@ -257,6 +273,9 @@ Tem interesse em uma piscina, mas sente inseguranca sobre tamanho, posicao, luz,
 - CA-09: Layout funciona em largura mobile sem quebra visual.
 - CA-10: Rotas diretas funcionam corretamente na Vercel.
 - CA-11: O README e o PRD descrevem o mesmo produto.
+- CA-12: A demonstracao de upsell atualiza imagem, valor estimado, valorizacao e impacto percebido ao marcar upgrades.
+- CA-13: Area Gourmet nao deve exibir paineis solares; Energia Solar deve exibir paineis solares quando selecionada.
+- CA-14: A secao de upsell deve ocultar token tecnico e apresentar uma identificacao comercial ao usuario.
 
 ## 14. Metricas de Sucesso
 
